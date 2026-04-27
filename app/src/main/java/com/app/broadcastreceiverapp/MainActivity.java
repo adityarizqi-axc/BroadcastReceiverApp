@@ -2,6 +2,7 @@ package com.app.broadcastreceiverapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -17,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
     MyBroadcastReceiver objReceiver = new MyBroadcastReceiver();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +36,12 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
             }
         }
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter("com.app.broadcastTraining.MY_BROADCAST");
+        IntentFilter intentFilter = new IntentFilter();
+
+        intentFilter.addAction("com.app.broadcasttraining.MY_BROADCAST");
+        intentFilter.addAction(Intent.ACTION_BATTERY_LOW);
+        intentFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
 
         ContextCompat.registerReceiver(
                 this,
@@ -47,11 +49,5 @@ public class MainActivity extends AppCompatActivity {
                 intentFilter,
                 ContextCompat.RECEIVER_EXPORTED
         );
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        unregisterReceiver(objReceiver);
     }
 }

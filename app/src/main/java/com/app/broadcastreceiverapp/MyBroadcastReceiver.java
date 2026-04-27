@@ -10,9 +10,32 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
-        Log.i("BroadcastReceiver", "Broadcast is Received");
-        Toast.makeText(context, "Broadcast is Received", Toast.LENGTH_SHORT).show();
+        String action = intent.getAction();
+
+        if (action == null) return;
+
+        switch (action) {
+            case "com.app.broadcastTraining.MY_BROADCAST":
+                showLogAndToast(context, "Broadcast Diterima!");
+                break;
+
+            case Intent.ACTION_BATTERY_LOW:
+                showLogAndToast(context, "Peringatan: Baterai Anda Lemah!");
+                break;
+
+            case Intent.ACTION_AIRPLANE_MODE_CHANGED:
+                boolean isAirplaneModeOn = intent.getBooleanExtra("state", false);
+                if (isAirplaneModeOn) {
+                    showLogAndToast(context, "Mode Pesawat Aktif");
+                } else {
+                    showLogAndToast(context, "Mode Pesawat Nonaktif");
+                }
+                break;
+        }
+    }
+
+    private void showLogAndToast(Context context, String message) {
+        Log.i("BroadcastReceiver", message);
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }
